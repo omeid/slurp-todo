@@ -1,0 +1,28 @@
+= doctype html
+html ng-app=app
+  head
+    meta charset="utf-8"
+    title Todo App with Go, Angular.js and Slurp.
+
+    script src="assets/libs.js"
+    script src="assets/app.js"
+
+    link rel="stylesheet" href="assets/style.css"
+
+  body.container
+    h2 Todo
+    div ng-controller="todos"
+      ul
+        li ng-repeat="todo in todos"
+          input type="checkbox" ng-model="todo.done" ng-click="updateTodo($index)"
+          span class="done-{{todo.done}}" {{todo.task}} 
+          span.delete ng-click="removeTodo($index)" x
+      form
+        input class="add-input" placeholder="I need to ..." type="text" ng-model="formTodoText" ng-model-instant=
+        button class="add-btn" ng-click="addTodo()" Add 
+
+    // At the end because we need the dom.
+    << if .Livereload >>
+    script.
+      require(window.location.protocol + '//' + window.location.hostname + '<< .Livereload >>/livereload.js');
+    << end >>

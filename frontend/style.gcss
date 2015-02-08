@@ -1,0 +1,32 @@
+html
+  text-align:center
+
+body
+  background-color: #faffa
+  text-align: center
+  width: 320px
+  margin: auto
+
+  ul
+    padding: 0 
+    width: 100%
+    text-align: left
+
+    input
+      background-color: #333
+      border: none
+    li
+      list-style-type: none
+    span.delete
+      display: inline-block
+      float: right
+      padding-right: 2%
+      cursor: pointer
+  form
+    input, button
+      padding: 2%
+    input
+      width: 70%
+      background: #fff
+    button
+      width: 23%
