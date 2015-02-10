@@ -24,8 +24,8 @@ Simple obligatory Todo app showcasing [Slurp](https://github.com/omeid/slurp).
 
 Now point your browser at `http://localhost:8081` and voila!
 
-Now if you edit any of the frontend files, they will be livereloaded
-and when you change \*g files, the server will be restarted.
+Now if you edit any of the frontend files, they will be livereloaded\*
+and when you change .go files, the server will be restarted.
 
 
 \*Works best in Firefox.
