@@ -19,8 +19,9 @@ Simple obligatory Todo app showcasing [Slurp](https://github.com/omeid/slurp).
 - Try and live code!
   ```bash
   $ cd $GOPATH/github.com/YOURUSERNAME/slurp-todo
-  $ slurp init # Download deps, may take a little time.
-  $ slurp 
+  $ slurp init             # Download deps
+  $ slurp gin livereload   # Gin: Build and Watch Go, 
+                           # livereload: Build and watch frontend.
   ```
 
   Now point your browser at `http://localhost:8081` and voila!
@@ -33,7 +34,7 @@ Simple obligatory Todo app showcasing [Slurp](https://github.com/omeid/slurp).
 
   ```bash
   $ slurp frontend #rebuild the frontend, just to be sure. 
-  $ go build
+  $ go build 
   ```
 
   Now you should have a `slurp-todo` binary and the `public` folder to ship.

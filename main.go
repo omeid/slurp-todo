@@ -40,7 +40,7 @@ func main() {
 
 	db.MustExec(`CREATE TABLE IF NOT EXISTS todos (` +
 		`id INTEGER PRIMARY KEY   AUTOINCREMENT, ` +
-		`task VARCHAR(255) NOT NULL UNIQUE, ` +
+		`task VARCHAR(255) NOT NULL, ` +
 		`done BOOLEAN NOT NULL)`)
 
 	//Some test data.
@@ -66,7 +66,7 @@ func main() {
 	//New TODO.
 	api.Path("/api/todos").Methods("POST").HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
-		todo := &Todo{}
+	  todo := &Todo{Task:"", Done: false}
 		err := json.NewDecoder(r.Body).Decode(todo)
 		if err != nil {
 			log.Println(err)
@@ -75,7 +75,6 @@ func main() {
 		}
 
 		res, err := db.Exec(`INSERT INTO todos (task, done) VALUES (:task, :done)`, todo.Task, todo.Done)
-		todo.Id, _ = res.LastInsertId()
 
 		if err != nil {
 			log.Println(err)
@@ -83,6 +82,7 @@ func main() {
 			return
 		}
 
+		todo.Id, _ = res.LastInsertId()
 		json.NewEncoder(w).Encode(todo)
 	})
 

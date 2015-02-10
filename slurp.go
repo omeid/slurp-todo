@@ -79,7 +79,7 @@ func Slurp(b *slurp.Build) {
 		)
 	})
 
-	b.Task("go", nil, func(c *slurp.C) error {
+	b.Task("gin", nil, func(c *slurp.C) error {
 		gin := watch.Watch(c, gin.Gin(c, &gin.Config{}, "-tags=slurp"), "*.go", "*/*.go", "*/*/*.go")
 
 		b.Defer(func() { gin.Close() })
@@ -104,7 +104,7 @@ func Slurp(b *slurp.Build) {
 		return nil
 	})
 
-	b.Task("livereload", nil, func(c *slurp.C) error {
+	b.Task("livereload", []string{"frontend"}, func(c *slurp.C) error {
 
 		l := watch.Watch(c, livereload.Start(c, config.Livereload, "public"),
 			"public/*.html",
@@ -129,7 +129,7 @@ func Slurp(b *slurp.Build) {
 	})
 
 	//When running slurp with no args, well, the "default" task is run.
-	b.Task("default", []string{"livereload", "go", "frontend"}, func(c *slurp.C) error {
+	b.Task("default", []string{"livereload", "gin"}, func(c *slurp.C) error {
 		//ideal for clean up.
 		return nil
 	})
