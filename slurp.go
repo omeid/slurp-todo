@@ -89,6 +89,10 @@ func Slurp(b *slurp.Build) {
 	})
 
 	b.Task("frontend", []string{"libs.js", "js", "ace", "gcss"}, func(c *slurp.C) error {
+	  return nil
+	})
+
+	b.Task("watch", []string{"frontend"}, func(c *slurp.C) error {
 
 		g := watch.Watch(c, func(string) { b.Run(c, "gcss") }, "frontend/*.gcss")
 		a := watch.Watch(c, func(string) { b.Run(c, "ace" ) }, "frontend/*.ace" )
@@ -104,12 +108,11 @@ func Slurp(b *slurp.Build) {
 		return nil
 	})
 
-	b.Task("livereload", []string{"frontend"}, func(c *slurp.C) error {
+	b.Task("livereload", nil, func(c *slurp.C) error {
 
 		l := watch.Watch(c, livereload.Start(c, config.Livereload, "public"),
-			"public/*.html",
+			"public/*",
 			"public/assets/*.css",
-			"public/assets/*.js",
 		)
 
 		b.Defer(func() {
@@ -129,7 +132,7 @@ func Slurp(b *slurp.Build) {
 	})
 
 	//When running slurp with no args, well, the "default" task is run.
-	b.Task("default", []string{"livereload", "gin"}, func(c *slurp.C) error {
+	b.Task("default", []string{"livereload", "watch", "gin"}, func(c *slurp.C) error {
 		//ideal for clean up.
 		return nil
 	})

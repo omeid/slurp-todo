@@ -20,8 +20,7 @@ Simple obligatory Todo app showcasing [Slurp](https://github.com/omeid/slurp).
   ```bash
   $ cd $GOPATH/github.com/YOURUSERNAME/slurp-todo
   $ slurp init             # Download deps
-  $ slurp gin livereload   # Gin: Build and Watch Go, 
-                           # livereload: Build and watch frontend.
+  $ slurp                  # Start default task: gin, watch, livereload. 
   ```
 
   Now point your browser at `http://localhost:8081` and voila!
