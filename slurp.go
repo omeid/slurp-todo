@@ -113,7 +113,7 @@ func Slurp(b *slurp.Build) {
 			"public/*",
 			"public/*/*",
 		).Then(
-			resources.Pack(c, resources.Config{
+			resources.Stage(c, resources.Config{
 				Pkg:     "main",
 				Var:     "Public",
 				Declare: false,
