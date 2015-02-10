@@ -66,7 +66,7 @@ func main() {
 	//New TODO.
 	api.Path("/api/todos").Methods("POST").HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
-	  todo := &Todo{Task:"", Done: false}
+	  todo := &Todo{}
 		err := json.NewDecoder(r.Body).Decode(todo)
 		if err != nil {
 			log.Println(err)

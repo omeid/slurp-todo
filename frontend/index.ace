@@ -18,8 +18,8 @@ html ng-app=app
           span class="done-{{todo.done}}" {{todo.task}} 
           span.delete ng-click="removeTodo($index)" x
       form
-        input class="add-input" placeholder="I need to ..." type="text" ng-model="formTodoText" ng-model-instant=
-        button class="add-btn" ng-click="addTodo()" Add 
+        input placeholder="I need to ..." type="text" ng-model="formTodoText"
+        button ng-disabled="formTodoText == ''" ng-click="addTodo()" Add
 
     // At the end because we need the dom.
     << if .Livereload >>

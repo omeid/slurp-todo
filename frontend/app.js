@@ -11,6 +11,7 @@ app.factory('TODO', function($resource) {
 
 app.controller('todos', function($scope, TODO) {
   
+  $scope.formTodoText = '';
   $scope.todos = TODO.query()
   
   $scope.getTotalTodos = function () {
