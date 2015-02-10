@@ -16,17 +16,33 @@ Simple obligatory Todo app showcasing [Slurp](https://github.com/omeid/slurp).
   $ go get -v  github.com/omeid/slurp-todo
   ```
 
-- Run 
+- Try and live code!
   ```bash
   $ cd $GOPATH/github.com/YOURUSERNAME/slurp-todo
   $ slurp init # Download deps, may take a little time.
   $ slurp 
   ```
 
-Now point your browser at `http://localhost:8081` and voila!
+  Now point your browser at `http://localhost:8081` and voila!
 
-Now if you edit any of the frontend files, they will be livereloaded\*
-and when you change .go files, the server will be restarted.
+  You're now in development, if you edit any of the frontend files, they will be livereloaded\* and when you change .go files  the server  will be restarted.
+
+
+- Build.
+  Once you're happy with the product, build it.
+
+  ```bash
+  $ slurp frontend #rebuild the frontend, just to be sure. 
+  $ go build
+  ```
+
+  Now you should have a `slurp-todo` binary and the `public` folder to ship.
+
+
+
+### TODO:
+
+  - Add resource embbedding.
 
 ##### Ace? gcss?
 The frontend is written using [Ace](https://github.com/yosssi/ace) for html templates and [gcss](https://github.com/yosssi/gcss) as css preprocessor, please refer to their documentation for their syntax documentation and more details
