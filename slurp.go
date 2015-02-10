@@ -3,10 +3,10 @@
 package main
 
 import (
-
 	"github.com/omeid/slurp"
 	"github.com/omeid/slurp/stages/archive"
 	"github.com/omeid/slurp/stages/fs"
+	"github.com/omeid/slurp/stages/resources"
 	"github.com/omeid/slurp/stages/web"
 
 	"github.com/slurp-contrib/ace"
@@ -18,7 +18,7 @@ import (
 )
 
 func init() {
-  config.Livereload = ":35729"
+	config.Livereload = ":35729"
 }
 
 func Slurp(b *slurp.Build) {
@@ -53,7 +53,7 @@ func Slurp(b *slurp.Build) {
 			gcss.Compile(c),
 			slurp.Concat(c, "style.css"),
 			fs.Dest(c, "./public/assets/"),
-		  )
+		)
 	})
 
 	b.Task("js", nil, func(c *slurp.C) error {
@@ -89,14 +89,14 @@ func Slurp(b *slurp.Build) {
 	})
 
 	b.Task("frontend", []string{"libs.js", "js", "ace", "gcss"}, func(c *slurp.C) error {
-	  return nil
+		return nil
 	})
 
 	b.Task("watch", []string{"frontend"}, func(c *slurp.C) error {
 
 		g := watch.Watch(c, func(string) { b.Run(c, "gcss") }, "frontend/*.gcss")
-		a := watch.Watch(c, func(string) { b.Run(c, "ace" ) }, "frontend/*.ace" )
-		j := watch.Watch(c, func(string) { b.Run(c, "js"  ) }, "frontend/*.js"  )
+		a := watch.Watch(c, func(string) { b.Run(c, "ace") }, "frontend/*.ace")
+		j := watch.Watch(c, func(string) { b.Run(c, "js") }, "frontend/*.js")
 
 		//Close all the watchers on exit.
 		b.Defer(func() {
@@ -108,11 +108,25 @@ func Slurp(b *slurp.Build) {
 		return nil
 	})
 
+	b.Task("embed", nil, func(c *slurp.C) error {
+		return fs.Src(c,
+			"public/*",
+			"public/*/*",
+		).Then(
+			resources.Pack(c, resources.Config{
+				Pkg:     "main",
+				Var:     "Public",
+				Declare: false,
+			}),
+			fs.Dest(c, "."),
+		  )
+	})
+
 	b.Task("livereload", nil, func(c *slurp.C) error {
 
 		l := watch.Watch(c, livereload.Start(c, config.Livereload, "public"),
 			"public/*",
-			"public/assets/*.css",
+			"public/assets/*",
 		)
 
 		b.Defer(func() {

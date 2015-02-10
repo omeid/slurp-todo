@@ -32,17 +32,29 @@ Simple obligatory Todo app showcasing [Slurp](https://github.com/omeid/slurp).
   Once you're happy with the product, build it.
 
   ```bash
-  $ slurp frontend #rebuild the frontend, just to be sure. 
-  $ go build 
+  $ slurp frontend        # Rebuild the frontend, just to be sure.
+  $ go build              # Build it!
   ```
 
-  Now you should have a `slurp-todo` binary and the `public` folder to ship.
+  Now you should have a `slurp-todo` binary that will work, it will server the "assets" from the public folder.
+  
+  But why stop there?
+
+  Embed!
+  
+  ```bash
+  $ slurp embed           # Generate the public folder as public_resource.go
+  $ go build -tags=embed  # Build the app with public_resource.go
+  ```
+
+  Now all you need to run this app is the `slurp-todo`, you don't need to ship the public folder.
 
 
+#### TODO
 
-### TODO:
+ - [x] Embed resorces (public directory).
+ - [ ] Use a database file instead of memory.
 
-  - Add resource embbedding.
 
 ##### Ace? gcss?
 The frontend is written using [Ace](https://github.com/yosssi/ace) for html templates and [gcss](https://github.com/yosssi/gcss) as css preprocessor, please refer to their documentation for their syntax documentation and more details
