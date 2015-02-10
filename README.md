@@ -7,8 +7,7 @@ Simple obligatory Todo app showcasing [Slurp](https://github.com/omeid/slurp).
 
 - Install Slurp.
   ```bash
-  $ go get -v   github.com/omeid/slurp           # Get slurp.
-  $ go install  github.com/omeid/slurp/cmd/slurp # Install runner.
+  $ go get -v   github.com/omeid/slurp/cmd/slurp # Get slurp.
   ```
 
 - Clone this repo and then get it, or just clone this one.

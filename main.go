@@ -39,7 +39,6 @@ func main() {
 	SetupDB()
 	RegisterAPI()
 	api.PathPrefix("/").Handler(http.FileServer(Public))
-
 	endpoint := fmt.Sprintf("%s:%s", config.Host, config.Port)
 	log.Printf("Listening on %s", endpoint)
 
