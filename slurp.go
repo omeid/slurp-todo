@@ -1,4 +1,5 @@
 // +build slurp
+
 package main
 
 import (
@@ -29,10 +30,10 @@ func Slurp(b *slurp.Build) {
 			"https://github.com/angular/bower-angular/archive/v1.3.12.zip",
 			"https://github.com/angular/bower-angular-route/archive/v1.3.12.zip",
 			"https://github.com/angular/bower-angular-resource/archive/v1.3.12.zip",
-		).Pipe(
+		).Then(
 			archive.Unzip(c),
 			fs.Dest(c, "libs/"),
-		).Wait()
+		)
 
 	})
 
@@ -41,41 +42,41 @@ func Slurp(b *slurp.Build) {
 			"libs/*angular*/angular.min.js",
 			"libs/bower-angular-route-*/angular-route.min.js",
 			"libs/bower-angular-resource-*/angular-resource.min.js",
-		).Pipe(
+		).Then(
 			slurp.Concat(c, "libs.js"),
 			fs.Dest(c, "./public/assets/"),
-		).Wait()
+		)
 	})
 
 	b.Task("gcss", nil, func(c *slurp.C) error {
-		return fs.Src(c, "frontend/*.gcss").Pipe(
+		return fs.Src(c, "frontend/*.gcss").Then(
 			gcss.Compile(c),
 			slurp.Concat(c, "style.css"),
 			fs.Dest(c, "./public/assets/"),
-		).Wait()
+		  )
 	})
 
 	b.Task("js", nil, func(c *slurp.C) error {
 		return fs.Src(c,
 			"frontend/*.js",
-		).Pipe(
+		).Then(
 			slurp.Concat(c, "app.js"),
 			jsmin.JSMin(c),
 			fs.Dest(c, "./public/assets/"),
-		).Wait()
+		)
 	})
 
 	b.Task("ace", nil, func(c *slurp.C) error {
 		return fs.Src(c,
 			"frontend/*.ace",
-		).Pipe(
+		).Then(
 			ace.Compile(c, ace.Options{
 				//Because we use {{ and }} for angular.js
 				DelimLeft:  "<<",
 				DelimRight: ">>",
 			}, config),
 			fs.Dest(c, "./public"),
-		).Wait()
+		)
 	})
 
 	b.Task("go", nil, func(c *slurp.C) error {
