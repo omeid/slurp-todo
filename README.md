@@ -36,10 +36,10 @@ Simple obligatory Todo app showcasing [Slurp](https://github.com/omeid/slurp).
   ```
 
   Now you should have a `slurp-todo` binary that will work, it will server the "assets" from the public folder.
-  
-  But why stop there?
 
-  Embed!
+  We can make things even more simpler.
+
+- Embed!
   
   ```bash
   $ slurp embed           # Generate the public folder as public_resource.go
@@ -47,16 +47,25 @@ Simple obligatory Todo app showcasing [Slurp](https://github.com/omeid/slurp).
   ```
 
   Now all you need to run this app is the `slurp-todo`, you don't need to ship the public folder.
+  
+  But why stop there?
+
+- Go nuts!
+  ```bash
+    $ go build -a -tags 'netgo embed' --ldflags '-extldflags "-static"'
+  ```
+    Now you have a static `slurp-todo` that doesn't require any libraries.\*\*
 
 
 #### TODO
 
  - [x] Embed resorces (public directory).
  - [ ] Use a database file instead of memory.
+ - [ ] Replace SQLite3 with something that is properly static.
 
 
 ##### Ace? gcss?
 The frontend is written using [Ace](https://github.com/yosssi/ace) for html templates and [gcss](https://github.com/yosssi/gcss) as css preprocessor, please refer to their documentation for their syntax documentation and more details
 
-\*Works best in Firefox.
-
+\*  Works best in Firefox.  
+\*\* This is not entirely true as the app is using SQLite3 and it depends on `dlopen` calls which requires a `glibc`, this can be easily avoided by replacing the SQLite3 database with a pure Go database or something that can be properly staticly linked. 
