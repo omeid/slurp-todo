@@ -12,20 +12,17 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
-type Config struct {
-	Host       string // Maybe used for templates.
-	Livereload string // For Debug/Development.
-	Port       string
-}
-
 var (
-	config = &Config{
+	Public http.FileSystem = http.Dir("./public")
+
+
+	config = struct {
+		Host       string // May be used for templates.
+		Livereload string // For Debug/Development.
+		Port       string
+	}{
 		Port: os.Getenv("PORT"),
 	}
-
-	api    = mux.NewRouter()
-	db     *sqlx.DB
-	Public http.FileSystem = http.Dir("./public")
 )
 
 func init() {
@@ -36,11 +33,14 @@ func init() {
 
 func main() {
 
-	SetupDB()
-	RegisterAPI()
+	db := sqlx.MustConnect("sqlite3", ":memory:")
+	SetupDB(db)
+
+	api := mux.NewRouter()
+	RegisterAPI(api, db)
 	api.PathPrefix("/").Handler(http.FileServer(Public))
+
 	endpoint := fmt.Sprintf("%s:%s", config.Host, config.Port)
 	log.Printf("Listening on %s", endpoint)
-
 	log.Fatal(http.ListenAndServe(endpoint, api))
 }

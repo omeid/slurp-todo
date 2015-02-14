@@ -2,6 +2,9 @@
 
 package main
 
+
+//This file will be only compiled along the project with slurp. So don't put any projec code here.
+
 import (
 	"github.com/omeid/slurp"
 	"github.com/omeid/slurp/stages/archive"
@@ -21,9 +24,10 @@ func init() {
 	config.Livereload = ":35729"
 }
 
+// This function is called to allow registering the tasks when slurp is run.
 func Slurp(b *slurp.Build) {
 
-	// Download deps.
+	// Download deps, why use a package manger for simply downloading some links and unziping. :)
 	b.Task("libs", nil, func(c *slurp.C) error {
 		return web.Get(c,
 			//TODO: this can use some lovin'. Perhaps a go-bower?
@@ -37,6 +41,7 @@ func Slurp(b *slurp.Build) {
 
 	})
 
+	//This stage concatenates the javascript libraries files.
 	b.Task("libs.js", nil, func(c *slurp.C) error {
 		return fs.Src(c,
 			"libs/*angular*/angular.min.js",
@@ -48,6 +53,7 @@ func Slurp(b *slurp.Build) {
 		)
 	})
 
+	// Compiles the gcss.
 	b.Task("gcss", nil, func(c *slurp.C) error {
 		return fs.Src(c, "frontend/*.gcss").Then(
 			gcss.Compile(c),
@@ -56,6 +62,7 @@ func Slurp(b *slurp.Build) {
 		)
 	})
 
+	//Minfiy our javascript.
 	b.Task("js", nil, func(c *slurp.C) error {
 		return fs.Src(c,
 			"frontend/*.js",
@@ -66,6 +73,7 @@ func Slurp(b *slurp.Build) {
 		)
 	})
 
+	// Compile the ace templates.
 	b.Task("ace", nil, func(c *slurp.C) error {
 		return fs.Src(c,
 			"frontend/*.ace",
@@ -79,6 +87,8 @@ func Slurp(b *slurp.Build) {
 		)
 	})
 
+	// This will fire-up a gin build server and proxy, it will rebuld the app everytime a go file changes.
+	// Uses the slurp tag to allow for package configuration (see the init() func above).
 	b.Task("gin", nil, func(c *slurp.C) error {
 		gin := watch.Watch(c, gin.Gin(c, &gin.Config{}, "-tags=slurp"), "*.go", "*/*.go", "*/*/*.go")
 
@@ -88,10 +98,12 @@ func Slurp(b *slurp.Build) {
 		return nil
 	})
 
+	//Frontend requires the libs.js, js, ace, and gcss tasks, this is basically "grouping" tasks.
 	b.Task("frontend", []string{"libs.js", "js", "ace", "gcss"}, func(c *slurp.C) error {
 		return nil
 	})
 
+	//The name says a lot.
 	b.Task("watch", []string{"frontend"}, func(c *slurp.C) error {
 
 		g := watch.Watch(c, func(string) { b.Run(c, "gcss") }, "frontend/*.gcss")
@@ -108,6 +120,7 @@ func Slurp(b *slurp.Build) {
 		return nil
 	})
 
+	//This will generate the resource file.
 	b.Task("embed", nil, func(c *slurp.C) error {
 		return fs.Src(c,
 			"public/*",
@@ -122,6 +135,7 @@ func Slurp(b *slurp.Build) {
 		  )
 	})
 
+	//Start a livereload server and triggered everytime anything in public folder changes.
 	b.Task("livereload", nil, func(c *slurp.C) error {
 
 		l := watch.Watch(c, livereload.Start(c, config.Livereload, "public"),

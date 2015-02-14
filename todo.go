@@ -17,8 +17,7 @@ type Todo struct {
 
 type Todos []Todos
 
-func SetupDB() {
-	db = sqlx.MustConnect("sqlite3", ":memory:")
+func SetupDB(db *sqlx.DB) {
 	db.MustExec(`CREATE TABLE IF NOT EXISTS todos (` +
 		`id INTEGER PRIMARY KEY   AUTOINCREMENT, ` +
 		`task VARCHAR(255) NOT NULL, ` +
@@ -31,7 +30,7 @@ func SetupDB() {
 	}
 }
 
-func RegisterAPI() {
+func RegisterAPI(api *mux.Router, db *sqlx.DB) {
 
 	//Get All.
 	api.Path("/api/todos").Methods("GET").HandlerFunc(func(w http.ResponseWriter, r *http.Request) {

@@ -56,6 +56,9 @@ Simple obligatory Todo app showcasing [Slurp](https://github.com/omeid/slurp).
   ```
     Now you have a static `slurp-todo` that doesn't require any libraries.\*\*
 
+### Cool, how this works?
+The frontend is written using [Ace](https://github.com/yosssi/ace) for html templates  and [gcss](https://github.com/yosssi/gcss) as css preprocessor, please refer to their documentation for their syntax documentation and more details, build and assets generation is managed with [slurp](https://github.com/omeid/slurp), to know about the specific tasks and stages see [slurp.go](slurp.go) file.
+
 
 #### TODO
 
@@ -64,8 +67,6 @@ Simple obligatory Todo app showcasing [Slurp](https://github.com/omeid/slurp).
  - [ ] Replace SQLite3 with something that is properly static.
 
 
-##### Ace? gcss?
-The frontend is written using [Ace](https://github.com/yosssi/ace) for html templates and [gcss](https://github.com/yosssi/gcss) as css preprocessor, please refer to their documentation for their syntax documentation and more details
-
+---
 \*  Works best in Firefox.  
-\*\* This is not entirely true as the app is using SQLite3 and it depends on `dlopen` calls which requires a `glibc`, this can be easily avoided by replacing the SQLite3 database with a pure Go database or something that can be properly staticly linked. 
+\*\* This is not entirely true as the app is using SQLite3 and it depends on `dlopen` calls which requires a `glibc`, this can be easily avoided by replacing the SQLite3 database with a pure Go database or something that can be properly staticly linked or a remote database.
