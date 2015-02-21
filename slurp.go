@@ -9,9 +9,9 @@ import (
 	"github.com/omeid/slurp"
 	"github.com/omeid/slurp/stages/archive"
 	"github.com/omeid/slurp/stages/fs"
-	"github.com/omeid/slurp/stages/resources"
 	"github.com/omeid/slurp/stages/web"
 
+	"github.com/slurp-contrib/resources"
 	"github.com/slurp-contrib/ace"
 	"github.com/slurp-contrib/gcss"
 	"github.com/slurp-contrib/gin"
@@ -126,7 +126,7 @@ func Slurp(b *slurp.Build) {
 			"public/*",
 			"public/*/*",
 		).Then(
-			resources.Stage(c, resources.Config{
+			resources.Build(c, resources.Config{
 				Pkg:     "main",
 				Var:     "Public",
 				Declare: false,
