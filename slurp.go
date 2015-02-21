@@ -130,6 +130,7 @@ func Slurp(b *slurp.Build) {
 				Pkg:     "main",
 				Var:     "Public",
 				Declare: false,
+				Tag: "embed",
 			}),
 			fs.Dest(c, "."),
 		  )
