@@ -1,12 +1,12 @@
 package main
 
 import (
+	"database/sql"
 	"encoding/json"
 	"log"
 	"net/http"
 
 	"github.com/gorilla/mux"
-	"github.com/jmoiron/sqlx"
 )
 
 type Todo struct {
@@ -17,30 +17,53 @@ type Todo struct {
 
 type Todos []Todos
 
-func SetupDB(db *sqlx.DB) {
-	db.MustExec(`CREATE TABLE IF NOT EXISTS todos (` +
+func SetupDB(db *sql.DB) error {
+	_, err := db.Exec(`CREATE TABLE IF NOT EXISTS todos (` +
 		`id INTEGER PRIMARY KEY   AUTOINCREMENT, ` +
 		`task VARCHAR(255) NOT NULL, ` +
 		`done BOOLEAN NOT NULL)`)
 
+	if err != nil {
+		return err
+	}
+
 	//Some test data.
 	for _, task := range []string{"Learn Slurp", "Be productive", "Be nice.", "Call parents.", "Help the poor"} {
 
-		db.MustExec(`INSERT INTO todos (task, done) VALUES ($1,$2)`, task, false)
+		_, err := db.Exec(`INSERT INTO todos (task, done) VALUES ($1,$2)`, task, false)
+		if err != nil {
+			return err
+		}
+
 	}
+
+	return nil
 }
 
-func RegisterAPI(api *mux.Router, db *sqlx.DB) {
+func RegisterAPI(api *mux.Router, db *sql.DB) {
 
 	//Get All.
 	api.Path("/api/todos").Methods("GET").HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		todos := []Todo{}
 
-		err := db.Select(&todos, "SELECT * FROM todos")
+		rows, err := db.Query("SELECT Id, Task, Done FROM todos")
+		defer func() {
+			if err != nil {
+				log.Println(err)
+				http.Error(w, "Well, this is embrassing. The server is broken. Try again?", http.StatusInternalServerError)
+			}
+		}()
+
 		if err != nil {
-			log.Println(err)
-			http.Error(w, "Well, this is embrassing. The server is broken. Try again?", http.StatusInternalServerError)
 			return
+		}
+
+		todos := []Todo{}
+		for rows.Next() {
+			todo := Todo{}
+			if err = rows.Scan(&todo.Id, &todo.Task, &todo.Done); err != nil {
+				return
+			}
+			todos = append(todos, todo)
 		}
 
 		json.NewEncoder(w).Encode(todos)

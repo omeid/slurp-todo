@@ -10,6 +10,7 @@ import (
 	"github.com/omeid/slurp/stages/archive"
 	"github.com/omeid/slurp/stages/fs"
 	"github.com/omeid/slurp/stages/web"
+	"github.com/omeid/slurp/stages/util"
 
 	"github.com/slurp-contrib/resources"
 	"github.com/slurp-contrib/ace"
@@ -48,7 +49,7 @@ func Slurp(b *slurp.Build) {
 			"libs/bower-angular-route-*/angular-route.min.js",
 			"libs/bower-angular-resource-*/angular-resource.min.js",
 		).Then(
-			slurp.Concat(c, "libs.js"),
+			util.Concat(c, "libs.js"),
 			fs.Dest(c, "./public/assets/"),
 		)
 	})

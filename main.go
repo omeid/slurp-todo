@@ -6,8 +6,8 @@ import (
 	"net/http"
 	"os"
 
+	"database/sql"
 	"github.com/gorilla/mux"
-	"github.com/jmoiron/sqlx"
 
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -33,7 +33,11 @@ func init() {
 
 func main() {
 
-	db := sqlx.MustConnect("sqlite3", ":memory:")
+	db, err := sql.Open("sqlite3", ":memory:")
+	if err != nil {
+	  log.Fatal(err)
+	}
+
 	SetupDB(db)
 
 	api := mux.NewRouter()
