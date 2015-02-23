@@ -58,7 +58,7 @@ func Slurp(b *slurp.Build) {
 	b.Task("gcss", nil, func(c *slurp.C) error {
 		return fs.Src(c, "frontend/*.gcss").Then(
 			gcss.Compile(c),
-			slurp.Concat(c, "style.css"),
+			util.Concat(c, "style.css"),
 			fs.Dest(c, "./public/assets/"),
 		)
 	})
@@ -68,7 +68,7 @@ func Slurp(b *slurp.Build) {
 		return fs.Src(c,
 			"frontend/*.js",
 		).Then(
-			slurp.Concat(c, "app.js"),
+			util.Concat(c, "app.js"),
 			jsmin.JSMin(c),
 			fs.Dest(c, "./public/assets/"),
 		)
