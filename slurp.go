@@ -2,22 +2,21 @@
 
 package main
 
-
 //This file will be only compiled along the project with slurp. So don't put any projec code here.
 
 import (
 	"github.com/omeid/slurp"
 	"github.com/omeid/slurp/stages/archive"
 	"github.com/omeid/slurp/stages/fs"
-	"github.com/omeid/slurp/stages/web"
 	"github.com/omeid/slurp/stages/util"
+	"github.com/omeid/slurp/stages/web"
 
-	"github.com/slurp-contrib/resources"
 	"github.com/slurp-contrib/ace"
 	"github.com/slurp-contrib/gcss"
 	"github.com/slurp-contrib/gin"
 	"github.com/slurp-contrib/jsmin"
 	"github.com/slurp-contrib/livereload"
+	"github.com/slurp-contrib/resources"
 	"github.com/slurp-contrib/watch"
 )
 
@@ -91,11 +90,12 @@ func Slurp(b *slurp.Build) {
 	// This will fire-up a gin build server and proxy, it will rebuld the app everytime a go file changes.
 	// Uses the slurp tag to allow for package configuration (see the init() func above).
 	b.Task("gin", nil, func(c *slurp.C) error {
-		gin := watch.Watch(c, gin.Gin(c, &gin.Config{}, "-tags=slurp"), "*.go", "*/*.go", "*/*/*.go")
+		gin := gin.NewGin(c, &gin.Config{}, "-tags=slurp")
+		watch := watch.Watch(c, gin.Run, "*.go", "*/*.go", "*/*/*.go")
 
-		b.Defer(func() { gin.Close() })
-
-		b.Wait() //Wait forever.
+		<-c.Done()
+		watch.Close()
+		gin.Close()
 		return nil
 	})
 
@@ -104,20 +104,17 @@ func Slurp(b *slurp.Build) {
 		return nil
 	})
 
-	//The name says a lot.
+	//The name says a lonet.
 	b.Task("watch", []string{"frontend"}, func(c *slurp.C) error {
 
 		g := watch.Watch(c, func(string) { b.Run(c, "gcss") }, "frontend/*.gcss")
 		a := watch.Watch(c, func(string) { b.Run(c, "ace") }, "frontend/*.ace")
 		j := watch.Watch(c, func(string) { b.Run(c, "js") }, "frontend/*.js")
 
-		//Close all the watchers on exit.
-		b.Defer(func() {
-			g.Close()
-			a.Close()
-			j.Close()
-		})
-		b.Wait() //Wait forever.
+		<-c.Done()
+		g.Close()
+		a.Close()
+		j.Close()
 		return nil
 	})
 
@@ -131,10 +128,10 @@ func Slurp(b *slurp.Build) {
 				Pkg:     "main",
 				Var:     "Public",
 				Declare: false,
-				Tag: "embed",
+				Tag:     "embed",
 			}),
 			fs.Dest(c, "."),
-		  )
+		)
 	})
 
 	//Start a livereload server and triggered everytime anything in public folder changes.
@@ -145,11 +142,9 @@ func Slurp(b *slurp.Build) {
 			"public/assets/*",
 		)
 
-		b.Defer(func() {
-			l.Close()
-		})
+		<-c.Done()
+		l.Close()
 
-		b.Wait() //Wait forever.
 		return nil
 	})
 
