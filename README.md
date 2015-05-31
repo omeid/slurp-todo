@@ -52,7 +52,7 @@ Simple obligatory Todo app showcasing [Slurp](https://github.com/omeid/slurp).
 
 - Go nuts!
   ```bash
-    $ go build -a -tags 'netgo embed' --ldflags '-extldflags "-static"'
+    $ go build -a -tags netgo -installsuffix netgo 
   ```
     Now you have a static `slurp-todo` that doesn't require any libraries.\*\*
 
