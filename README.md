@@ -1,7 +1,7 @@
 
 ##### !!!Deprecated!!! 
 
-Slurp and relatives are releated with [Gonzo](https://github.com/omeid/gonzo) and [Kargar](https://github.com/omeid/kargar). For an Todo example using them, see [Golang Angular Material Todo](https://github.com/omeid/golang-angular-material)
+Slurp and relatives are replaced with [Gonzo](https://github.com/omeid/gonzo) and [Kargar](https://github.com/omeid/kargar). For an Todo example using them, see [Golang Angular Material Todo](https://github.com/omeid/golang-angular-material)
 
 ---
 # Golang Angular Todo
